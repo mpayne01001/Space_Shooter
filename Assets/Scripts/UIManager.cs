@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _restartText;
     [SerializeField]
+    private Text _ammoText;
+    [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
     private Image _livesImage;
@@ -24,6 +26,7 @@ public class UIManager : MonoBehaviour
     void Start()
     { 
         _scoreText.text = "Score: " + 0;
+        _ammoText.text = "Ammo: 15";
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
         {
@@ -54,6 +57,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateAmmoCount(int ammoRemaining)
+    {
+        _ammoText.text = "Ammo: " + ammoRemaining;
+
+        if (ammoRemaining == 0)
+        {
+            _ammoText.color = Color.red;
+            StartCoroutine(FlickerNoAmmoTextRoutine());
+        }
+        else if (ammoRemaining < 8)
+        {
+            _ammoText.color = Color.yellow;
+        }
+    }
+
     IEnumerator FlickerGameOverTextRoutine()
     {
         bool displayText = false;
@@ -63,6 +81,20 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             _gameOverText.gameObject.SetActive(displayText);
+
+            displayText = !displayText;
+        }
+    }
+
+    IEnumerator FlickerNoAmmoTextRoutine()
+    {
+        bool displayText = false;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            _ammoText.gameObject.SetActive(displayText);
 
             displayText = !displayText;
         }

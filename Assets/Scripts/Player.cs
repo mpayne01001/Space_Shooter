@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score;
 
+    [SerializeField]
+    private int _ammoCount = 15;
+
     UIManager _uiManager;
     AudioManager _audioManager;
 
@@ -141,17 +144,20 @@ public class Player : MonoBehaviour
     {
         _canFire = Time.time + _fireRate;
 
-        if (_isTripleShotActive)
+        if (_ammoCount > 0)
         {
-            Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            if (_isTripleShotActive)
+            {
+                Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            }
+            _audioSource.Play();
+            _ammoCount--;
+            _uiManager.UpdateAmmoCount(_ammoCount);
         }
-        else
-        {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-        }
-
-        _audioSource.Play();
-        //play laser audio clip
     }
 
     public void Damage()
