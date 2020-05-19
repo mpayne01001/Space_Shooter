@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 5f;
     [SerializeField]
+    private float _tempSpeed = 0;
+    [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
@@ -95,10 +97,22 @@ public class Player : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+        
+        if (_isSpeedBoostActive)
+        {
+            _tempSpeed = _speed * 2;
+        }
+        else if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _tempSpeed = _speed + 2;
+        }
+        else
+        {
+            _tempSpeed = _speed;
+        }
 
-        var speed = _isSpeedBoostActive ? 8.0f : _speed;
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.Translate(direction * _tempSpeed * Time.deltaTime);
 
         //Clamping
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0));
