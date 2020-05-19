@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
     [SerializeField]
     private int _lives = 3;
+    [SerializeField]
+    private int _shieldHealth = 3;
     private SpawnManager _spawnManager;
 
     private bool _isTripleShotActive;
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     GameObject _shield;
+    SpriteRenderer _shieldSprite;
+    Color _originalShieldColor;
 
     [SerializeField]
     private int _score;
@@ -51,6 +55,7 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioManager = GameObject.Find("Audio_Manager").GetComponent<AudioManager>();
         _audioSource = GetComponent<AudioSource>();
+        _shieldSprite = _shield.GetComponent<SpriteRenderer>();
 
         if (_spawnManager == null)
         {
@@ -70,6 +75,11 @@ public class Player : MonoBehaviour
         if (_audioSource != null)
         {
             _audioSource.clip = _laserClip;
+        }
+
+        if (_shieldSprite != null)
+        {
+            _originalShieldColor = _shieldSprite.color;
         }
     }
 
@@ -148,8 +158,28 @@ public class Player : MonoBehaviour
     { 
         if (_isShieldActive)
         {
-            _isShieldActive = false;
-            _shield.SetActive(false);
+            _shieldHealth--;
+            var shieldSprite = _shield.GetComponent<SpriteRenderer>();
+            if (shieldSprite != null)
+            {
+                if (_shieldHealth == 2)
+                {
+                    shieldSprite.color = Color.yellow;
+
+                }
+                else if (_shieldHealth == 1)
+                {
+                    shieldSprite.color = Color.red;
+                }
+                else
+                {
+                    _isShieldActive = false;
+                    _shield.SetActive(false);
+                    _shieldHealth = 3;
+                    shieldSprite.color = _originalShieldColor;
+                }
+            }
+
             return;
         }
 
