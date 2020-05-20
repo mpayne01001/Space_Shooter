@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShotPrefab;
     [SerializeField]
+    private GameObject _sprayShotPrefab;
+    [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     [SerializeField]
@@ -28,6 +30,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive;
     private bool _isSpeedBoostActive;
     private bool _isShieldActive;
+    private bool _isSprayShotActive;
 
     [SerializeField]
     GameObject _shield;
@@ -146,10 +149,15 @@ public class Player : MonoBehaviour
 
         if (_ammoCount > 0)
         {
-            if (_isTripleShotActive)
+            if (_isSprayShotActive)
+            {
+                Instantiate(_sprayShotPrefab, transform.position + new Vector3(0, 0, 0), Quaternion.identity);
+            }
+            else if (_isTripleShotActive)
             {
                 Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
             }
+
             else
             {
                 Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
@@ -215,8 +223,17 @@ public class Player : MonoBehaviour
     public void TripleShotActive()
     {
         _isTripleShotActive = true;
+        _isSprayShotActive = false;
 
         StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    public void SprayShotActive()
+    {
+        _isSprayShotActive = true;
+        _isTripleShotActive = false;
+
+        StartCoroutine(SprayShotPowerDownRoutine());
     }
 
     IEnumerator TripleShotPowerDownRoutine()
@@ -224,6 +241,13 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         _isTripleShotActive = false;
+    }
+
+    IEnumerator SprayShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+
+        _isSprayShotActive = false;
     }
 
     public void SpeedBoostActive()

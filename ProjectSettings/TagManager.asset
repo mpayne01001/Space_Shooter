@@ -7,6 +7,10 @@ TagManager:
   - Enemy
   - Laser
   - Enemy_Laser
+  - UpLeft_Laser
+  - UpRight_Laser
+  - Left_Laser
+  - Right_Laser
   layers:
   - Default
   - TransparentFX
