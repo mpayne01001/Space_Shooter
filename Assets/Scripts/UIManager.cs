@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
 
     private GameManager _gameManager;
 
+    private bool _noAmmo;
+
     // Start is called before the first frame update
     void Start()
     { 
@@ -64,11 +66,18 @@ public class UIManager : MonoBehaviour
         if (ammoRemaining == 0)
         {
             _ammoText.color = Color.red;
+            _noAmmo = true;
             StartCoroutine(FlickerNoAmmoTextRoutine());
         }
         else if (ammoRemaining < 8)
         {
             _ammoText.color = Color.yellow;
+        }
+        else
+        {
+            _noAmmo = false;
+            _ammoText.gameObject.SetActive(true);
+            _ammoText.color = Color.white;
         }
     }
 
@@ -90,7 +99,7 @@ public class UIManager : MonoBehaviour
     {
         bool displayText = false;
 
-        while (true)
+        while (_noAmmo)
         {
             yield return new WaitForSeconds(0.5f);
 

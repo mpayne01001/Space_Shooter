@@ -233,6 +233,12 @@ public class Player : MonoBehaviour
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
 
+    public void RefillAmmo()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmoCount(_ammoCount);
+    }
+
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5);
@@ -243,8 +249,13 @@ public class Player : MonoBehaviour
     public void ShieldActive()
     {
         _isShieldActive = true;
-
-        _shield.SetActive(true);
+        _shieldHealth = 3;
+        var shieldSprite = _shield.GetComponent<SpriteRenderer>();
+        if (shieldSprite != null)
+        {
+            shieldSprite.color = _originalShieldColor;
+        }
+            _shield.SetActive(true);
     }
 
     public void AddScore(int points)
