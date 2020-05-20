@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 5466232116274186644, guid: c001f9d394365ba41b2f481a9b3635b1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5466232116274186644, guid: c001f9d394365ba41b2f481a9b3635b1,
         type: 3}
@@ -840,7 +840,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &995225040
 GameObject:
@@ -1005,6 +1005,8 @@ MonoBehaviour:
   - {fileID: 8729768259193632236, guid: c81950afd73ee034ea34a6c2355ed34e, type: 3}
   - {fileID: 7684802306382326018, guid: 1cda48a1e6fa7d84d91c95c0feda5657, type: 3}
   - {fileID: 5312544436578354193, guid: 14a2341d2e753a84c8df856fe6c82e30, type: 3}
+  - {fileID: 5235254924766696218, guid: 40d48bd4488fa0040a96e6b27c6b81ec, type: 3}
+  - {fileID: 7360812650294624797, guid: efa5d7a1d933aee489a428bb0445a17e, type: 3}
   _enemySpawnTime: 5
 --- !u!4 &1027864814
 Transform:
@@ -1805,7 +1807,7 @@ RectTransform:
   - {fileID: 594187208}
   - {fileID: 1600449781}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

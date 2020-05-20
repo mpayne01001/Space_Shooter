@@ -233,12 +233,6 @@ public class Player : MonoBehaviour
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
 
-    public void RefillAmmo()
-    {
-        _ammoCount = 15;
-        _uiManager.UpdateAmmoCount(_ammoCount);
-    }
-
     IEnumerator SpeedBoostPowerDownRoutine()
     {
         yield return new WaitForSeconds(5);
@@ -256,6 +250,33 @@ public class Player : MonoBehaviour
             shieldSprite.color = _originalShieldColor;
         }
             _shield.SetActive(true);
+    }
+
+    public void RefillAmmo()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmoCount(_ammoCount);
+    }
+
+    public void HealPlayer()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            _uiManager.UpdateLives(_lives);
+
+            //lives after healing
+            if (_lives == 2)
+            {
+                //fix random engine fire
+                _engineFires[Random.Range(0, 2)].SetActive(false);
+            }
+            else if (_lives == 3)
+            {
+                _engineFires[0].SetActive(false);
+                _engineFires[1].SetActive(false);
+            }
+        }
     }
 
     public void AddScore(int points)
