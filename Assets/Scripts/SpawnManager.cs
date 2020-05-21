@@ -13,12 +13,18 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private float _enemySpawnTime = 5;
 
+    Vector3[] _enemySpawnPattern;
+
     private bool _stopSpawning;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _enemySpawnPattern = new[] {
+        new Vector3(Random.Range(-9.5f, 9.5f), 7, 0),
+        new Vector3(-11.5f, 5.5f, 0),
+        new Vector3(11.5f, 5.5f, 0)
+    };
     }
 
     public void StartSpawning()
@@ -42,8 +48,25 @@ public class SpawnManager : MonoBehaviour
 
         while (!_stopSpawning)
         {
-            GameObject newEnemy = Instantiate(_enemyPrefab, new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+            var spawnPattern = Random.Range(0, 3);
+            GameObject newEnemy = Instantiate(_enemyPrefab, _enemySpawnPattern[spawnPattern], Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
+            var enemy = newEnemy.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                switch (spawnPattern)
+                {
+                    case 0:
+                        enemy.EnemyType = "Normal";
+                        break;
+                    case 1:
+                        enemy.EnemyType = "Left";
+                        break;
+                    case 2:
+                        enemy.EnemyType = "Right";
+                        break;
+                }
+            }
             yield return new WaitForSeconds(_enemySpawnTime);
         }
     }

@@ -23,6 +23,8 @@ public class Enemy : MonoBehaviour
     private float _fireRate;
     private float _canFire;
 
+    public string EnemyType;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,12 +69,61 @@ public class Enemy : MonoBehaviour
 
     void CalculateMovement()
     {
+        switch (EnemyType)
+        {
+            case "Normal":
+                MoveDown();
+                break;
+            case "Left":
+                MoveRight();
+                break;
+            case "Right":
+                MoveLeft();
+                break;
+        }
+
+    }
+
+    void MoveDown()
+    {
         //move down at 4m/s
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
 
         if (transform.position.y <= -6f)
         {
             transform.position = new Vector3(Random.Range(-9.5f, 9.5f), 7, 0);
+        }
+    }
+
+    void MoveLeft()
+    {
+        //move down at 4m/s
+        transform.Translate(Vector3.left * _speed * Time.deltaTime);
+
+        if (transform.position.x <= -11.5f)
+        {
+            transform.position = new Vector3(11.5f, transform.position.y - 2.5f, 0);
+        }
+
+        if (transform.position.y <= -6f)
+        {
+            transform.position = new Vector3(11.5f, 5.5f, 0);
+        }
+    }
+
+    void MoveRight()
+    {
+        //move down at 4m/s
+        transform.Translate(Vector3.right * _speed * Time.deltaTime);
+
+        if (transform.position.x >= 11.5f)
+        {
+            transform.position = new Vector3(-11.5f, transform.position.y - 2.5f, 0);
+        }
+
+        if (transform.position.y <= -6f)
+        {
+            transform.position = new Vector3(-11.5f, 5.5f, 0);
         }
     }
 
