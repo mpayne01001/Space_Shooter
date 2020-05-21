@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     private bool _isSpeedBoostActive;
     private bool _isShieldActive;
     private bool _isSprayShotActive;
+    private bool _thrustersEngaged;
 
     [SerializeField]
     GameObject _shield;
@@ -42,6 +43,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _ammoCount = 15;
+    [SerializeField]
+    private int _totalThrusters = 100;
+    private int _remainingThrusters;
 
     UIManager _uiManager;
     AudioManager _audioManager;
@@ -62,6 +66,7 @@ public class Player : MonoBehaviour
         _audioManager = GameObject.Find("Audio_Manager").GetComponent<AudioManager>();
         _audioSource = GetComponent<AudioSource>();
         _shieldSprite = _shield.GetComponent<SpriteRenderer>();
+        _remainingThrusters = _totalThrusters;
 
         if (_spawnManager == null)
         {
@@ -98,6 +103,12 @@ public class Player : MonoBehaviour
         {
             FireLaser();
         }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _thrustersEngaged = false;
+            StartCoroutine(RefreshThrustersRoutine());
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -118,9 +129,12 @@ public class Player : MonoBehaviour
         {
             _tempSpeed = _speed * 2;
         }
-        else if (Input.GetKey(KeyCode.LeftShift))
+        else if (Input.GetKey(KeyCode.LeftShift) && _remainingThrusters > 0)
         {
             _tempSpeed = _speed + 2;
+            _remainingThrusters--;
+            _uiManager.UpdateThrusterText(_remainingThrusters);
+            _thrustersEngaged = true;
         }
         else
         {
@@ -309,6 +323,16 @@ public class Player : MonoBehaviour
 
         _uiManager.UpdateScoreText(_score);
     }
-    //method to add 10 to score
-    //communicate with UI to add score
+    
+    IEnumerator RefreshThrustersRoutine()
+    {
+        yield return new WaitForSeconds(3);
+
+        while (!_thrustersEngaged && _remainingThrusters < _totalThrusters)
+        {
+            _remainingThrusters++;
+            _uiManager.UpdateThrusterText(_remainingThrusters);
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
 }

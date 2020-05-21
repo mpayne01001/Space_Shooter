@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _ammoText;
     [SerializeField]
+    private Text _thrusterText;
+    [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
     private Image _livesImage;
@@ -23,12 +25,14 @@ public class UIManager : MonoBehaviour
     private GameManager _gameManager;
 
     private bool _noAmmo;
+    private bool _noThrusters;
 
     // Start is called before the first frame update
     void Start()
     { 
         _scoreText.text = "Score: " + 0;
         _ammoText.text = "Ammo: 15";
+        _thrusterText.text = "Thrusters: 100";
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
         {
@@ -81,6 +85,30 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateThrusterText(int remainingThrusters)
+    {
+        _thrusterText.text = "Thrusters: " + remainingThrusters;
+
+        if (remainingThrusters == 0)
+        {
+            _thrusterText.color = Color.red;
+            _noThrusters = true;
+            StartCoroutine(FlickerNoThrustersTextRoutine());
+        }
+        else if (remainingThrusters <= 50)
+        {
+            _noThrusters = false;
+            _thrusterText.gameObject.SetActive(true);
+            _thrusterText.color = Color.yellow;
+        }
+        else
+        {
+            _noThrusters = false;
+            _thrusterText.gameObject.SetActive(true);
+            _thrusterText.color = Color.white;
+        }
+    }
+
     IEnumerator FlickerGameOverTextRoutine()
     {
         bool displayText = false;
@@ -108,6 +136,21 @@ public class UIManager : MonoBehaviour
             displayText = !displayText;
         }
     }
+
+    IEnumerator FlickerNoThrustersTextRoutine()
+    {
+        bool displayText = false;
+
+        while (_noThrusters)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            _thrusterText.gameObject.SetActive(displayText);
+
+            displayText = !displayText;
+        }
+    }
+
     public void DisplayGameOverText()
     {
         _gameOverText.gameObject.SetActive(true);
