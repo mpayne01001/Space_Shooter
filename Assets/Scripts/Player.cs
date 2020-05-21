@@ -39,6 +39,9 @@ public class Player : MonoBehaviour
     Color _originalShieldColor;
 
     [SerializeField]
+    GameObject _maincamera;
+
+    [SerializeField]
     private int _score;
 
     [SerializeField]
@@ -183,7 +186,9 @@ public class Player : MonoBehaviour
     }
 
     public void Damage()
-    { 
+    {
+        StartCoroutine(ShakeScreenCoroutine());
+
         if (_isShieldActive)
         {
             _shieldHealth--;
@@ -334,5 +339,17 @@ public class Player : MonoBehaviour
             _uiManager.UpdateThrusterText(_remainingThrusters);
             yield return new WaitForSeconds(0.05f);
         }
+    }
+
+    IEnumerator ShakeScreenCoroutine()
+    {
+        var orignalPosition = _maincamera.transform.rotation;
+
+        _maincamera.transform.rotation = Quaternion.Euler(0, 0, 3);
+        yield return new WaitForSeconds(0.05f);
+        _maincamera.transform.rotation = Quaternion.Euler(0, 0, -3);
+        yield return new WaitForSeconds(0.05f);
+
+        _maincamera.transform.rotation = orignalPosition;
     }
 }
