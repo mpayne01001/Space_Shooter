@@ -55,6 +55,9 @@ public class Powerup : MonoBehaviour
                         player.HealPlayer();
                         break;
                     case 5:
+                        player.SlowDownActive();
+                        break;
+                    case 6:
                         player.SprayShotActive();
                         break;
                 }

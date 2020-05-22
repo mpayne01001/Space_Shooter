@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     private bool _isShieldActive;
     private bool _isSprayShotActive;
     private bool _thrustersEngaged;
+    private bool _isSlowDownActive;
 
     [SerializeField]
     GameObject _shield;
@@ -139,6 +140,8 @@ public class Player : MonoBehaviour
         else if (Input.GetKey(KeyCode.LeftShift) && _remainingThrusters > 0)
         {
             _tempSpeed = _speed + 2;
+            if (_isSlowDownActive)
+                _tempSpeed -= 2;
             _remainingThrusters--;
             _uiManager.UpdateThrusterText(_remainingThrusters);
             _thrustersEngaged = true;
@@ -146,6 +149,8 @@ public class Player : MonoBehaviour
         else
         {
             _tempSpeed = _speed;
+            if (_isSlowDownActive)
+                _tempSpeed -= 2;
         }
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
@@ -297,6 +302,20 @@ public class Player : MonoBehaviour
             shieldSprite.color = _originalShieldColor;
         }
             _shield.SetActive(true);
+    }
+
+    public void SlowDownActive()
+    {
+        _isSlowDownActive = true;
+
+        StartCoroutine(SlowDownPowerDownRoutine());
+    }
+
+    IEnumerator SlowDownPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+
+        _isSlowDownActive = false;
     }
 
     public void RefillAmmo()

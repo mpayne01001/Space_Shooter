@@ -107,7 +107,7 @@ public class SpawnManager : MonoBehaviour
         while (!_stopSpawningAll)
         {
             yield return new WaitForSeconds(Random.Range(3, 8));
-            int randomPowerup = Random.Range(0, 5);
+            int randomPowerup = Random.Range(0, 6);
             Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
         }
     }
@@ -124,7 +124,7 @@ public class SpawnManager : MonoBehaviour
             int randomValue = Random.Range(0, 10);
             //if value is 0, spawn spray shot
             if (randomValue == 0)
-                Instantiate(_powerups[5], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+                Instantiate(_powerups[6], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
         }
     }
 

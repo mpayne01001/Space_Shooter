@@ -1007,8 +1007,15 @@ MonoBehaviour:
   - {fileID: 5312544436578354193, guid: 14a2341d2e753a84c8df856fe6c82e30, type: 3}
   - {fileID: 5235254924766696218, guid: 40d48bd4488fa0040a96e6b27c6b81ec, type: 3}
   - {fileID: 7360812650294624797, guid: efa5d7a1d933aee489a428bb0445a17e, type: 3}
+  - {fileID: 4511003905643278540, guid: ee999a872372b324c980a78084cfe833, type: 3}
   - {fileID: 8979256454000231792, guid: 5c7b6844a4c1efc46be9ae5bf6f91ae1, type: 3}
+  _asteroidPrefab: {fileID: 4516680971560501224, guid: c001f9d394365ba41b2f481a9b3635b1,
+    type: 3}
   _enemySpawnTime: 5
+  _wave: 1
+  _enemiesPerWave: 3
+  _enemiesSpawned: 0
+  _enemiesDestroyed: 0
 --- !u!4 &1027864814
 Transform:
   m_ObjectHideFlags: 0
@@ -1358,6 +1365,84 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600449780}
+  m_CullTransparentMesh: 0
+--- !u!1 &1770363931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1770363932}
+  - component: {fileID: 1770363934}
+  - component: {fileID: 1770363933}
+  m_Layer: 5
+  m_Name: Wave_text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1770363932
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770363931}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1913782896}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 264.2543, y: 43.54033}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1770363933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770363931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 32
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Wave 1
+--- !u!222 &1770363934
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770363931}
   m_CullTransparentMesh: 0
 --- !u!1 &1830082912
 GameObject:
@@ -1886,6 +1971,7 @@ RectTransform:
   - {fileID: 594187208}
   - {fileID: 1600449781}
   - {fileID: 1877235751}
+  - {fileID: 1770363932}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1911,6 +1997,7 @@ MonoBehaviour:
   _restartText: {fileID: 594187209}
   _ammoText: {fileID: 1600449782}
   _thrusterText: {fileID: 1877235752}
+  _waveText: {fileID: 1770363933}
   _liveSprites:
   - {fileID: 21300000, guid: ba53e111f0125654cabfd4eefaf3a657, type: 3}
   - {fileID: 21300000, guid: 80fba5ece7697c44eacc036539c1b552, type: 3}
@@ -2054,7 +2141,7 @@ MonoBehaviour:
   _lives: 3
   _shieldHealth: 3
   _shield: {fileID: 125777093}
-  _maincamera: {fileID: 0}
+  _maincamera: {fileID: 1910174722}
   _score: 0
   _ammoCount: 15
   _totalThrusters: 100
