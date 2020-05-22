@@ -111,7 +111,32 @@ public class SpawnManager : MonoBehaviour
         while (!_stopSpawningAll)
         {
             yield return new WaitForSeconds(Random.Range(3, 8));
-            int randomPowerup = Random.Range(0, 6);
+            int randomPowerup = Random.Range(0, 10);
+            switch (randomPowerup)
+            {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    randomPowerup = 3; //Ammo
+                    break;
+                case 4:
+                    randomPowerup = 0; //Triple Shot
+                    break;
+                case 5:
+                case 6:
+                    randomPowerup = 1; //Speed
+                    break;
+                case 7:
+                    randomPowerup = 4; //Health
+                    break;
+                case 8:
+                    randomPowerup = 2; //Shield
+                    break;
+                default:
+                    randomPowerup = 5; //Slow
+                    break;
+            }
             Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
         }
     }
