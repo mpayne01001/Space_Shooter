@@ -80,6 +80,10 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("UIManager is null");
         }
+        else
+        {
+            _uiManager.InitializeMaxAmmo(_ammoCount);
+        }
 
         if (_audioManager == null)
         {

@@ -27,11 +27,12 @@ public class UIManager : MonoBehaviour
     private bool _noAmmo;
     private bool _noThrusters;
 
+    public int MaxAmmo;
+
     // Start is called before the first frame update
     void Start()
     { 
         _scoreText.text = "Score: " + 0;
-        _ammoText.text = "Ammo: 15";
         _thrusterText.text = "Thrusters: 100";
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         if (_gameManager == null)
@@ -43,6 +44,12 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void InitializeMaxAmmo(int maxAmmo)
+    {
+        MaxAmmo = maxAmmo;
+        _ammoText.text = "Ammo: " + MaxAmmo + " / " + MaxAmmo;
     }
 
     public void UpdateScoreText(int score)
@@ -65,7 +72,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmoCount(int ammoRemaining)
     {
-        _ammoText.text = "Ammo: " + ammoRemaining;
+        _ammoText.text = "Ammo: " + ammoRemaining + " / " + MaxAmmo;
 
         if (ammoRemaining == 0)
         {
