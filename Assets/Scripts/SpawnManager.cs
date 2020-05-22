@@ -11,11 +11,25 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     GameObject[] _powerups;
     [SerializeField]
+    GameObject _asteroidPrefab;
+    [SerializeField]
     private float _enemySpawnTime = 5;
 
     Vector3[] _enemySpawnPattern;
 
-    private bool _stopSpawning;
+    private bool _stopSpawningAll;
+    private bool _stopSpawningEnemies;
+
+    [SerializeField]
+    private int _wave = 1;
+    [SerializeField]
+    private int _enemiesPerWave = 3;
+    [SerializeField]
+    private int _enemiesSpawned = 0;
+    [SerializeField]
+    private int _enemiesDestroyed = 0;
+
+    UIManager _uiManager;
 
     // Start is called before the first frame update
     void Start()
@@ -25,18 +39,32 @@ public class SpawnManager : MonoBehaviour
         new Vector3(-11.5f, 5.5f, 0),
         new Vector3(11.5f, 5.5f, 0)
     };
+
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     public void StartSpawning()
     {
+        _stopSpawningAll = false;
+        _stopSpawningEnemies = false;
+
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnSprayShotRoutine());
     }
 
+    private void SpawnAsteroid()
+    {
+        Instantiate(_asteroidPrefab, _asteroidPrefab.transform.position, Quaternion.identity);
+    }
+
     // Update is called once per frame
     void Update()
     {
+        if (_enemiesSpawned == _wave * _enemiesPerWave)
+        {
+            _stopSpawningEnemies = true;
+        }
     }
 
     //spawn game objects every 5 seconds
@@ -46,7 +74,7 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        while (!_stopSpawning)
+        while (!_stopSpawningAll && !_stopSpawningEnemies)
         {
             var spawnPattern = Random.Range(0, 3);
             GameObject newEnemy = Instantiate(_enemyPrefab, _enemySpawnPattern[spawnPattern], Quaternion.identity);
@@ -67,6 +95,7 @@ public class SpawnManager : MonoBehaviour
                         break;
                 }
             }
+            _enemiesSpawned++;
             yield return new WaitForSeconds(_enemySpawnTime);
         }
     }
@@ -75,7 +104,7 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        while (!_stopSpawning)
+        while (!_stopSpawningAll)
         {
             yield return new WaitForSeconds(Random.Range(3, 8));
             int randomPowerup = Random.Range(0, 5);
@@ -88,7 +117,7 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        while (!_stopSpawning)
+        while (!_stopSpawningAll)
         {
             yield return new WaitForSeconds(3);
             //Get random value 0-9
@@ -101,6 +130,35 @@ public class SpawnManager : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-        _stopSpawning = true;
+        _stopSpawningAll = true;
+    }
+
+    public void EnemyDestroyed()
+    {
+        _enemiesDestroyed++;
+
+        if (_enemiesDestroyed == _wave * _enemiesPerWave)
+        {
+            _stopSpawningAll = true;
+            BeginNextWave();
+        }
+    }
+
+    private void BeginNextWave()
+    {
+        _wave++;
+        _enemiesDestroyed = 0;
+        _enemiesSpawned = 0;
+
+        StartCoroutine(NextWaveRoutine());
+    }
+
+    IEnumerator NextWaveRoutine()
+    {
+        _uiManager.ShowWaveText(_wave);
+
+        yield return new WaitForSeconds(2);
+
+        SpawnAsteroid();
     }
 }

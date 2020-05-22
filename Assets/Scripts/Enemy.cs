@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private Animator _destroyAnim;
 
     private AudioManager _audioManager;
+    private SpawnManager _spawnManager;
 
     [SerializeField]
     private GameObject _enemyLaserPrefab;
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
         _destroyAnim = GetComponent<Animator>();
         _audioManager = GameObject.Find("Audio_Manager").GetComponent<AudioManager>();
         _audioSource = GetComponent<AudioSource>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
 
         if (_player == null)
         {
@@ -41,6 +43,16 @@ public class Enemy : MonoBehaviour
         if (_destroyAnim == null)
         {
             Debug.LogError("Animation is null");
+        }
+
+        if (_audioManager == null)
+        {
+            Debug.LogError("Audio Manager is null");
+        }
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn Manager is null");
         }
 
         _audioSource.clip = _laserClip;
@@ -141,6 +153,8 @@ public class Enemy : MonoBehaviour
             _speed = 0;
             Destroy(this.gameObject, 2.8f);
             _audioManager.PlayExplosionAudio();
+
+            _spawnManager.EnemyDestroyed();
         }
         
         if (other.tag == "Laser")
@@ -157,6 +171,8 @@ public class Enemy : MonoBehaviour
 
             if (_player != null)
                 _player.AddScore(10);
+
+            _spawnManager.EnemyDestroyed();
         }
     }
 }

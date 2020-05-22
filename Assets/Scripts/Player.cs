@@ -347,13 +347,11 @@ public class Player : MonoBehaviour
 
     IEnumerator ShakeScreenCoroutine()
     {
-        var orignalPosition = _maincamera.transform.rotation;
-
         _maincamera.transform.rotation = Quaternion.Euler(0, 0, 3);
         yield return new WaitForSeconds(0.05f);
         _maincamera.transform.rotation = Quaternion.Euler(0, 0, -3);
         yield return new WaitForSeconds(0.05f);
 
-        _maincamera.transform.rotation = orignalPosition;
+        _maincamera.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }

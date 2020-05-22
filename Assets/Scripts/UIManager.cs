@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _thrusterText;
     [SerializeField]
+    private Text _waveText;
+    [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
     private Image _livesImage;
@@ -31,7 +33,8 @@ public class UIManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    { 
+    {
+        _waveText.text = "Wave 1";
         _scoreText.text = "Score: " + 0;
         _thrusterText.text = "Thrusters: 100";
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -39,11 +42,29 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("GameManager is null");
         }
+
+        ShowWaveText(1);
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void ShowWaveText(int wave)
+    {
+        StartCoroutine(WaveTextRoutine(wave));
+    }
+
+    IEnumerator WaveTextRoutine(int wave)
+    {
+        _waveText.text = "Wave " + wave;
+        _waveText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(2);
+
+        _waveText.gameObject.SetActive(false);
+
     }
 
     public void InitializeMaxAmmo(int maxAmmo)
