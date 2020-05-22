@@ -82,6 +82,10 @@ public class SpawnManager : MonoBehaviour
             var enemy = newEnemy.GetComponent<Enemy>();
             if (enemy != null)
             {
+                //25% chance for enemy to have shields
+                int randomValue = Random.Range(1, 5);
+                if (randomValue == 1)
+                    enemy.AddEnemyShield();
                 switch (spawnPattern)
                 {
                     case 0:

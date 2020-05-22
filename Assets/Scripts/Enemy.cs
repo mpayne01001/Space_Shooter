@@ -24,6 +24,10 @@ public class Enemy : MonoBehaviour
     private float _fireRate;
     private float _canFire;
 
+    [SerializeField]
+    GameObject _shield;
+    private bool _enemyHasShield;
+
     public string EnemyType;
 
     // Start is called before the first frame update
@@ -149,30 +153,52 @@ public class Enemy : MonoBehaviour
             if (player != null)
                 player.Damage();
 
-            _destroyAnim.SetTrigger("OnEnemyDeath");
-            _speed = 0;
-            Destroy(this.gameObject, 2.8f);
-            _audioManager.PlayExplosionAudio();
+            if (_enemyHasShield)
+            {
+                _shield.SetActive(false);
+                _enemyHasShield = false;
+            }
+            else
+            {
+                _destroyAnim.SetTrigger("OnEnemyDeath");
+                _speed = 0;
+                Destroy(this.gameObject, 2.8f);
+                _audioManager.PlayExplosionAudio();
 
-            _spawnManager.EnemyDestroyed();
+                _spawnManager.EnemyDestroyed();
+            }
         }
         
         if (other.tag == "Laser")
         {
             Destroy(other.gameObject);
 
-            _destroyAnim.SetTrigger("OnEnemyDeath");
-            _speed = 0;
+            if (_enemyHasShield)
+            {
+                _shield.SetActive(false);
+                _enemyHasShield = false;
+            }
+            else
+            {
+                _destroyAnim.SetTrigger("OnEnemyDeath");
+                _speed = 0;
 
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 2.8f);
+                Destroy(GetComponent<Collider2D>());
+                Destroy(this.gameObject, 2.8f);
 
-            _audioManager.PlayExplosionAudio();
+                _audioManager.PlayExplosionAudio();
 
-            if (_player != null)
-                _player.AddScore(10);
+                if (_player != null)
+                    _player.AddScore(10);
 
-            _spawnManager.EnemyDestroyed();
+                _spawnManager.EnemyDestroyed();
+            }
         }
+    }
+
+    public void AddEnemyShield()
+    {
+        _enemyHasShield = true;
+        _shield.SetActive(true);
     }
 }
