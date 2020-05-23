@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
 
     private float _fireRate;
     private float _canFire;
+    private bool _smartLaserFired;
 
     [SerializeField]
     GameObject _shield;
@@ -69,6 +70,22 @@ public class Enemy : MonoBehaviour
     {
         CalculateMovement();
 
+        FireLaser();
+
+        if (this.transform.position.y <= _player.transform.position.y - 4 && !_smartLaserFired)
+        {
+            _smartLaserFired = true;
+            FireSmartLaser();
+        }
+
+        if (this.transform.position.y > _player.transform.position.y)
+        {
+            _smartLaserFired = false;
+        }
+    }
+
+    void FireLaser()
+    {
         if (Time.time > _canFire)
         {
             _fireRate = Random.Range(3, 8);
@@ -80,7 +97,16 @@ public class Enemy : MonoBehaviour
             lasers[0].AssignEnemyLaser();
             lasers[1].AssignEnemyLaser();
         }
-        
+    }
+
+    void FireSmartLaser()
+    {
+        _audioSource.Play();
+        //Get lasers and set them to be enemy lasers
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position + new Vector3(0, 3f, 0), Quaternion.identity);
+        Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+        lasers[0].AssignEnemySmartLaser();
+        lasers[1].AssignEnemySmartLaser();
     }
 
     void CalculateMovement()
