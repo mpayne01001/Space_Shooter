@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _waveText;
     [SerializeField]
+    private Text _winText;
+    [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
     private Image _livesImage;
@@ -58,13 +60,33 @@ public class UIManager : MonoBehaviour
 
     IEnumerator WaveTextRoutine(int wave)
     {
-        _waveText.text = "Wave " + wave;
+        _waveText.text = wave > 3 ? "Final Boss" : "Wave " + wave;
         _waveText.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(2);
 
         _waveText.gameObject.SetActive(false);
 
+    }
+
+    public void ShowWinText()
+    {
+        _restartText.gameObject.SetActive(true);
+        StartCoroutine(WinTextRoutine());
+    }
+
+    IEnumerator WinTextRoutine()
+    {
+        bool displayText = false;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            _winText.gameObject.SetActive(displayText);
+
+            displayText = !displayText;
+        }
     }
 
     public void InitializeMaxAmmo(int maxAmmo)

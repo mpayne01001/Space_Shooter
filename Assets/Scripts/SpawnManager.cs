@@ -15,6 +15,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     GameObject _asteroidPrefab;
     [SerializeField]
+    GameObject _finalBossPrefab;
+    [SerializeField]
     private float _enemySpawnTime = 5;
 
     Vector3[] _enemySpawnPattern;
@@ -59,6 +61,11 @@ public class SpawnManager : MonoBehaviour
     private void SpawnAsteroid()
     {
         Instantiate(_asteroidPrefab, _asteroidPrefab.transform.position, Quaternion.identity);
+    }
+
+    private void SpawnFinalBoss()
+    {
+        Instantiate(_finalBossPrefab, new Vector3(0, 7f, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -205,7 +212,14 @@ public class SpawnManager : MonoBehaviour
         _enemiesDestroyed = 0;
         _enemiesSpawned = 0;
 
-        StartCoroutine(NextWaveRoutine());
+        if (_wave > 3)
+        {
+            StartCoroutine(BossWaveRoutine());
+        }
+        else
+        {
+            StartCoroutine(NextWaveRoutine());
+        }
     }
 
     IEnumerator NextWaveRoutine()
@@ -215,6 +229,15 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         SpawnAsteroid();
+    }
+
+    IEnumerator BossWaveRoutine()
+    {
+        _uiManager.ShowWaveText(_wave);
+
+        yield return new WaitForSeconds(2);
+
+        SpawnFinalBoss();
     }
 
     public Transform GetClosestEnemy(Vector3 laserPosition)
