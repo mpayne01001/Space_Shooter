@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     private float _fireRate;
     private float _canFire;
     private bool _smartLaserFired;
+    private bool _powerUpLaserFired;
 
     [SerializeField]
     GameObject _shield;
@@ -72,6 +73,8 @@ public class Enemy : MonoBehaviour
 
         FireLaser();
 
+        CheckForPowerupsAndFireLaser();
+
         if (this.transform.position.y <= _player.transform.position.y - 4 && !_smartLaserFired)
         {
             _smartLaserFired = true;
@@ -109,6 +112,16 @@ public class Enemy : MonoBehaviour
         lasers[1].AssignEnemySmartLaser();
     }
 
+    void FirePowerupLaser()
+    {
+        _audioSource.Play();
+        //Get lasers and set them to be enemy lasers
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
+        Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+        lasers[0].AssignEnemyLaser();
+        lasers[1].AssignEnemyLaser();
+    }
+
     void CalculateMovement()
     {
         switch (EnemyType)
@@ -124,6 +137,29 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
+    }
+
+    //Fires at 1st powerup it sees
+    void CheckForPowerupsAndFireLaser()
+    {
+        var powerups = _spawnManager.GetActivePowerups();
+
+        if (powerups != null)
+        {
+            Debug.Log(powerups.Length);
+            foreach (var powerup in powerups)
+            {
+                Debug.Log(powerup.position.x);
+                if (powerup.position.x >= this.transform.position.x - 0.5f
+                    && powerup.position.x <= this.transform.position.x + 0.5f
+                    && powerup.position.y <= this.transform.position.y - 1.5f
+                    && !_powerUpLaserFired)
+                {
+                    _powerUpLaserFired = true;
+                    FirePowerupLaser();
+                }
+            }
+        }
     }
 
     void MoveDown()

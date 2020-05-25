@@ -7,7 +7,7 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float _speed = 8;
     [SerializeField]
-    private bool _isEnemyLaser;
+    public bool _isEnemyLaser;
     private bool _isEnemySmartLaser;
 
     private SpawnManager _spawnManager;

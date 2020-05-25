@@ -11,6 +11,7 @@ TagManager:
   - UpRight_Laser
   - Left_Laser
   - Right_Laser
+  - Powerup
   layers:
   - Default
   - TransparentFX

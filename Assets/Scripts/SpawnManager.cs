@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     GameObject _enemyContainer;
     [SerializeField]
+    GameObject _powerupContainer;
+    [SerializeField]
     GameObject[] _powerups;
     [SerializeField]
     GameObject _asteroidPrefab;
@@ -138,7 +140,8 @@ public class SpawnManager : MonoBehaviour
                     randomPowerup = 5; //Slow
                     break;
             }
-            Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+            var newPowerup = Instantiate(_powerups[randomPowerup], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+            newPowerup.transform.parent = _powerupContainer.transform;
         }
     }
 
@@ -154,7 +157,10 @@ public class SpawnManager : MonoBehaviour
             int randomValue = Random.Range(0, 10);
             //if value is 0, spawn spray shot
             if (randomValue == 0)
-                Instantiate(_powerups[6], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+            {
+                var sprayShot = Instantiate(_powerups[6], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+                sprayShot.transform.parent = _powerupContainer.transform;
+            }
         }
     }
 
@@ -170,7 +176,10 @@ public class SpawnManager : MonoBehaviour
             int randomValue = Random.Range(0, 20);
             //if value is 0, spawn homing shot
             if (randomValue == 0)
-                Instantiate(_powerups[7], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+            {
+                var homingShot = Instantiate(_powerups[7], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+                homingShot.transform.parent = _powerupContainer.transform;
+            }
         }
     }
 
@@ -226,5 +235,10 @@ public class SpawnManager : MonoBehaviour
             }
         }
         return bestTarget;
+    }
+
+    public Transform[] GetActivePowerups()
+    {
+        return _powerupContainer.GetComponentsInChildren<Transform>();
     }
 }

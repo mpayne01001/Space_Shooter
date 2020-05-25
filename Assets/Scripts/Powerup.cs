@@ -68,5 +68,16 @@ public class Powerup : MonoBehaviour
             _audioManager.PlayPowerupSound();
             Destroy(this.gameObject);
         }
+        else if (other.tag == "Laser")
+        {
+            var laser = other.gameObject.GetComponent<Laser>();
+            if (laser != null)
+            {
+                if (laser._isEnemyLaser)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+        }
     }
 }
