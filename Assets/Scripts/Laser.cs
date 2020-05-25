@@ -10,6 +10,17 @@ public class Laser : MonoBehaviour
     private bool _isEnemyLaser;
     private bool _isEnemySmartLaser;
 
+    private SpawnManager _spawnManager;
+
+    private void Start()
+    {
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("Spawn_Manager is null");
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -38,6 +49,9 @@ public class Laser : MonoBehaviour
                     break;
                 case "UpRight_Laser":
                     MoveUpRight();
+                    break;
+                case "Homing":
+                    HomeInToClosestEnemy();
                     break;
                 default:
                     MoveUp();
@@ -118,6 +132,26 @@ public class Laser : MonoBehaviour
             if (this.transform.parent != null)
                 Destroy(this.transform.parent.gameObject);
             Destroy(this.gameObject);
+        }
+    }
+
+    private void HomeInToClosestEnemy()
+    {
+        var closestEnemyPosition = _spawnManager.GetClosestEnemy(this.transform.position);
+
+        if (closestEnemyPosition != null)
+        {
+            var rigidBody = GetComponent<Rigidbody2D>();
+            Vector3 direction = closestEnemyPosition.position - this.transform.position;
+            direction.Normalize();
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var rotateToTarget = Quaternion.AngleAxis(angle, Vector3.forward);
+            this.transform.rotation = Quaternion.Slerp(transform.rotation, rotateToTarget, Time.deltaTime * 0.5f);
+            rigidBody.velocity = new Vector2(direction.x * _speed, direction.y * _speed);
+        }
+        else
+        {
+            MoveUp();
         }
     }
 

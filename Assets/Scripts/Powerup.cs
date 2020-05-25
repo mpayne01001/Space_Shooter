@@ -60,6 +60,9 @@ public class Powerup : MonoBehaviour
                     case 6:
                         player.SprayShotActive();
                         break;
+                    case 7:
+                        player.HomingShotActive();
+                        break;
                 }
             }
             _audioManager.PlayPowerupSound();

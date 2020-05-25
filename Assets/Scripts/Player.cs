@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     private bool _isSprayShotActive;
     private bool _thrustersEngaged;
     private bool _isSlowDownActive;
+    private bool _isHomingShotActive;
 
     [SerializeField]
     GameObject _shield;
@@ -183,10 +184,13 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
             }
-
             else
             {
-                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+                var laser = Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+                if (_isHomingShotActive)
+                {
+                    laser.name = "Homing";
+                }
             }
             _audioSource.Play();
             _ammoCount--;
@@ -316,6 +320,20 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         _isSlowDownActive = false;
+    }
+
+    public void HomingShotActive()
+    {
+        _isHomingShotActive = true;
+
+        StartCoroutine(HomingShotPowerDownRoutine());
+    }
+
+    IEnumerator HomingShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5);
+
+        _isHomingShotActive = false;
     }
 
     public void RefillAmmo()

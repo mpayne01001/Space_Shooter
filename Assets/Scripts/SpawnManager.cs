@@ -51,6 +51,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
         StartCoroutine(SpawnSprayShotRoutine());
+        StartCoroutine(SpawnHomingShotRoutine());
     }
 
     private void SpawnAsteroid()
@@ -157,6 +158,22 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    //5% chance to spawn every 3 seconds
+    IEnumerator SpawnHomingShotRoutine()
+    {
+        yield return new WaitForSeconds(3f);
+
+        while (!_stopSpawningAll)
+        {
+            yield return new WaitForSeconds(3);
+            //Get random value 0-19
+            int randomValue = Random.Range(0, 20);
+            //if value is 0, spawn homing shot
+            if (randomValue == 0)
+                Instantiate(_powerups[7], new Vector3(Random.Range(-9.5f, 9.5f), 7, 0), Quaternion.identity);
+        }
+    }
+
     public void OnPlayerDeath()
     {
         _stopSpawningAll = true;
@@ -189,5 +206,25 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         SpawnAsteroid();
+    }
+
+    public Transform GetClosestEnemy(Vector3 laserPosition)
+    {
+        Transform bestTarget = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        foreach (Enemy potentialTarget in _enemyContainer.GetComponentsInChildren<Enemy>())
+        {
+            if (potentialTarget.GetComponent<Collider2D>() == null)
+                continue;
+            Transform transform = potentialTarget.transform;
+            Vector3 directionToTarget = transform.position - laserPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                bestTarget = potentialTarget.transform;
+            }
+        }
+        return bestTarget;
     }
 }
